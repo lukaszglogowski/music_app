@@ -1,18 +1,20 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, import_of_legacy_library_into_null_safe
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading/indicator/line_scale_pulse_out_indicator.dart';
-import 'package:loading/loading.dart';
-import 'package:music_app/modules/bloc/player_bloc.dart';
+import 'package:music_app/modules/bloc/stations_bloc/stations_bloc.dart';
 import 'package:music_app/widgets/drawer.dart';
-import 'package:music_app/widgets/idle_dots.dart';
+import 'package:music_app/widgets/loading_indicator.dart';
+import 'package:music_app/widgets/media_player_sheet.dart';
+import 'package:music_app/widgets/radio_status_animation.dart';
+import 'package:music_app/widgets/station_list_item.dart';
+import 'package:music_app/widgets/title_header.dart';
+import 'package:music_app/modules/bloc/player_bloc/player_bloc.dart';
 
 // For now stateless widget which will contain radio section of app.
 
 class RadioPage extends StatelessWidget {
   static const String routeName = '/radio';
-  final _eskaUrl = 'https://stream-mz.planetradio.co.uk/planetrock.mp3';
 
   @override
   Widget build(BuildContext context) {
@@ -21,75 +23,125 @@ class RadioPage extends StatelessWidget {
         title: Text('Online Radio'),
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 100),
-        child: Center(
-          child: BlocBuilder<PlayerBloc, PlayerState>(builder: (context, state) {
-            if (state is PausedState) {
-              return IdleDots(color: Theme.of(context).colorScheme.secondary);
-            } else if (state is PlayingState) {
-              return Loading(
-                indicator: LineScalePulseOutIndicator(),
-                size: 150,
-                color: Theme.of(context).colorScheme.secondary,
-              );
-            } else {
-              throw Exception('Unknown state of bloc');
-            }
-          }),
-        ),
+      body: BlocBuilder<StationsBloc, StationsState>(
+        buildWhen: (previous, current) {
+          return (current is! FetchingNextStationState);
+        },
+        builder: (context, state) {
+          if (state is InitialState) {
+            context.read<StationsBloc>().add(FetchStations());
+            return SizedBox();
+          } else if (state is LoadingStationsState) {
+            return LoadingIndicator(label: 'Fetching stations');
+          } else if (state is StationsFetchedStete) {
+            final stations = state.stations;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TitleHeader(
+                  title: 'Top Stations',
+                  status: BlocBuilder<PlayerBloc, PlayerState>(
+                      builder: (context, state) {
+                    if (state is PausedState || state is StoppedState) {
+                      return PausedStatus();
+                    } else {
+                      return PlayingStatus();
+                    }
+                  }),
+                ),
+                Expanded(
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification scrollInfo) {
+                      if (state is StationsFetchedStete &&
+                          scrollInfo.metrics.pixels ==
+                              scrollInfo.metrics.maxScrollExtent) {
+                        context.read<StationsBloc>().add(FetchNextStations());
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    },
+                    child: ListView.builder(
+                      itemCount: stations.length,
+                      itemBuilder: (context, index) {
+                        return StationListItem(
+                          name: stations[index].name,
+                          imageUrl: stations[index].imageUrl,
+                          onTap: () {
+                            context
+                                .read<PlayerBloc>()
+                                .add(PlayEvent(stations[index]));
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                BlocBuilder<PlayerBloc, PlayerState>(
+                  builder: (context, state) {
+                    if (state is! StoppedState) {
+                      return SizedBox(height: 80);
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                )
+              ],
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('An error has occurred'),
+                  SizedBox(height: 20),
+                  MaterialButton(
+                    onPressed: () {
+                      context.read<StationsBloc>().add(FetchStations());
+                    },
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.black,
+                    child: Text('Retry'),
+                  )
+                ],
+              ),
+            );
+          }
+        },
       ),
-      bottomSheet: Container(
-        color: Theme.of(context).primaryColor,
-        height: 100,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SizedBox(
-                height: 60,
-                width: 60,
-                child: Image.asset('assets/images/music_cover.png'),
+      bottomSheet: BlocBuilder<PlayerBloc, PlayerState>(
+        builder: (context, state) {
+          if (state is StoppedState) {
+            return SizedBox();
+          } else if (state is PlayingState) {
+            final currentStation = state.currentStation;
+            return MediaPlayerSheet(
+              title: currentStation.name,
+              imageUrl: currentStation.imageUrl,
+              mediaButtonIcon: Icon(
+                Icons.pause,
+                size: 32,
               ),
-            ),
-            Text(
-              'Planet Rock',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: BlocBuilder<PlayerBloc, PlayerState>(
-                builder: (context, state) {
-                  if (state is PausedState) {
-                    return IconButton(
-                      icon: Icon(
-                        Icons.play_arrow,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                        context.read<PlayerBloc>().add(PlayEvent(url: _eskaUrl));
-                      },
-                    );
-                  } else {
-                    return IconButton(
-                      icon: Icon(
-                        Icons.pause,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                        context.read<PlayerBloc>().add(PauseEvent());
-                      },
-                    );
-                  }
-                },
+              onMediaButtonPress: () {
+                context.read<PlayerBloc>().add(PauseEvent());
+              },
+            );
+          } else {
+            final currentStation = (state as PausedState).currentStation;
+            return MediaPlayerSheet(
+              title: currentStation.name,
+              imageUrl: currentStation.imageUrl,
+              mediaButtonIcon: Icon(
+                Icons.play_arrow,
+                size: 32,
               ),
-            )
-          ],
-        ),
+              onMediaButtonPress: () {
+                context.read<PlayerBloc>().add(PlayEvent(currentStation));
+              },
+            );
+          }
+        },
       ),
     );
   }
 }
-
