@@ -7,6 +7,7 @@ import 'package:music_app/station.dart';
 part 'player_event.dart';
 part 'player_state.dart';
 
+// This class takes care of playing (or not) music from curently chosen radio station.
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   final RadioPlayer radioPlayer;

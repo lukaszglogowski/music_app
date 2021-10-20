@@ -7,6 +7,8 @@ import 'package:music_app/station.dart';
 part 'stations_event.dart';
 part 'stations_state.dart';
 
+// This class takes care of getting list of available radio stations and managing the existing ones.
+
 class StationsBloc extends Bloc<StationsEvent, StationsState> {
   final StationsRepo stationsRepo;
   final int _pageSize = 20;
@@ -48,3 +50,7 @@ class StationsBloc extends Bloc<StationsEvent, StationsState> {
     }
   }
 }
+
+
+
+

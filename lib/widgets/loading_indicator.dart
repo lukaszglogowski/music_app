@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+// Shows when first batch of statins is being loaded into app.
+
 class LoadingIndicator extends StatelessWidget {
   final String label;
   LoadingIndicator({required this.label});

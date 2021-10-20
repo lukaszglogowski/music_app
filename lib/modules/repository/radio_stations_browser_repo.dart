@@ -5,6 +5,8 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:music_app/modules/repository/stations_repo.dart';
 import 'package:music_app/station.dart';
 
+// This class sends URL request to API.RADIO-BROWSER.INFO for list of stations, decodes JSON response and puts it in list.
+
 class RadiosBrowserRepo extends StationsRepo {
   final Dio _dio;
   static final String _baseUrl = 'https://fr1.api.radio-browser.info';
