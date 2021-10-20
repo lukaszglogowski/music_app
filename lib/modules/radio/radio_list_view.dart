@@ -11,7 +11,7 @@ import 'package:music_app/widgets/station_list_item.dart';
 import 'package:music_app/widgets/title_header.dart';
 import 'package:music_app/modules/bloc/player_bloc/player_bloc.dart';
 
-// For now stateless widget which will contain radio section of app.
+// Main page for Radio part of app, it contains list of stations, status dots and mediaplayer sheet.
 
 class RadioPage extends StatelessWidget {
   static const String routeName = '/radio';

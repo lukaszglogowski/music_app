@@ -32,8 +32,7 @@ class AppDrawer extends StatelessWidget {
   }
 
   // This widget is representation of header that belongs to drawer. It consists of
-  // decorative image and placeholder title. Later can be changed to show song 
-  // currently playing.
+  // decorative image and placeholder title.
 
   Widget _createHeader() {
     return DrawerHeader(

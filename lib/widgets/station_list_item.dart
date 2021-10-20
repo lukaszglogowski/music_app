@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/widgets/station_favicon.dart';
 
+// This class creates every item on list that displays all tracked radio stations.
+
 class StationListItem extends StatelessWidget {
   final GestureTapCallback onTap;
   final String imageUrl;

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 
+// This class shows small image of every station logo beside it.
+
 class StationFavicon extends StatelessWidget {
   static const String DEFAULT_ICON = "assets/images/music_cover.png";
   final String imageUrl;
@@ -14,7 +16,7 @@ class StationFavicon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).textTheme.bodyText1!.color!.withAlpha(40)),
+        border: Border.all(color: Theme.of(context).textTheme.bodyText1!.color!.withAlpha(0)),
       ),
       child: CachedNetworkImage(
         height: 48,

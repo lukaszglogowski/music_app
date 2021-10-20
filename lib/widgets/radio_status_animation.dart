@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:loading/loading.dart';
 import 'package:loading/indicator/line_scale_pulse_out_indicator.dart';
 
+// This class takes care of dots animation that shows whether some radio station is playing or not.
+
 class PausedStatus extends StatelessWidget {
 
   @override

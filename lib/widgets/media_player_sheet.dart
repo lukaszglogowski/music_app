@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/widgets/station_favicon.dart';
 
+// This class represents bottom sheet that shows current station and button to control it.
+
 class MediaPlayerSheet extends StatelessWidget {
   final String imageUrl;
   final String title;

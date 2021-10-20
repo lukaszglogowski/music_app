@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+// This class creates title at the top of radio stations list, left to animated dots.
+
 class TitleHeader extends StatelessWidget {
   final String title;
   final Widget status;
