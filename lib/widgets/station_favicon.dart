@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 // This class shows small image of every station logo beside it.
 
 class StationFavicon extends StatelessWidget {
-  static const String DEFAULT_ICON = "assets/images/music_cover.png";
+  static const String DEFAULT_ICON = "assets/images/default.png";
   final String imageUrl;
 
   StationFavicon({required this.imageUrl});

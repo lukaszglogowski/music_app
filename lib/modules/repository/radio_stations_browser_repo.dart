@@ -23,7 +23,7 @@ class RadiosBrowserRepo extends StationsRepo {
     int limit
   ) async {
     final stationsFromCountryCodeUrl = _stationsByCountryCodeUrl + countryCode;
-    final Response <Map> rawStationsJson = await _dio.get(                            // Delete <Map> to proceed
+    final Response rawStationsJson = await _dio.get(                            // Delete <Map> to proceed
       _buildUrlToSortByPopularityWithPagination(
         stationsFromCountryCodeUrl,
         offset,

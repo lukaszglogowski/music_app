@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
           _createHeader(),
           _createDrawerItem(
             icon: Icons.library_music, 
-            text: 'Library music',
+            text: 'Music library',
             onTap: () => Navigator.pushReplacementNamed(context, Routes.libraryMusic),
           ),
           _createDrawerItem(

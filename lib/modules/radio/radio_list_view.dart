@@ -20,7 +20,13 @@ class RadioPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Online Radio'),
+        backgroundColor: Theme.of(context).backgroundColor,
+        title: Text(
+          'Online Radio',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color
+          ),
+        ),
       ),
       drawer: AppDrawer(),                                    // This adds side menu to radio side of app
       body: BlocBuilder<StationsBloc, StationsState>(         // Here starts the actual radio part of app
@@ -119,7 +125,7 @@ class RadioPage extends StatelessWidget {
               title: currentStation.name,
               imageUrl: currentStation.imageUrl,
               mediaButtonIcon: Icon(
-                Icons.pause,
+                Icons.pause_rounded,
                 size: 32,
               ),
               onMediaButtonPress: () {
@@ -132,7 +138,7 @@ class RadioPage extends StatelessWidget {
               title: currentStation.name,
               imageUrl: currentStation.imageUrl,
               mediaButtonIcon: Icon(
-                Icons.play_arrow,
+                Icons.play_arrow_rounded,
                 size: 32,
               ),
               onMediaButtonPress: () {

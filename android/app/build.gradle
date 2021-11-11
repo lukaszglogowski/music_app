@@ -65,5 +65,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation('com.google.android.exoplayer:exoplayer:2.15.0')             // Without this "audio_manager" crashes project
+    //implementation('com.google.android.exoplayer:exoplayer:2.15.0')             // Without this "audio_manager" crashes project
 }
