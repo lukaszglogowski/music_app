@@ -12,6 +12,7 @@ import 'modules/repository/stations_repo.dart';
 import 'package:dio/dio.dart';
 
 
+
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final RadioPlayer radioPlayer = JustAudioPlayer();
@@ -39,7 +40,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Music App Master Degree',
       theme: ThemeData(
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black,
         ),
       ),
-      home: RadioPage(),
+      home: LibraryMusicPage(),
       routes: {
         Routes.libraryMusic: (context) => LibraryMusicPage(),
         Routes.radio: (context) => RadioPage(),

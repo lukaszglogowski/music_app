@@ -20,58 +20,64 @@ class RadioPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Online Radio'),
+        backgroundColor: Theme.of(context).backgroundColor,
+        title: Text(
+          'Online Radio',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color
+          ),
+        ),
       ),
-      drawer: AppDrawer(),
-      body: BlocBuilder<StationsBloc, StationsState>(
+      drawer: AppDrawer(),                                    // This adds side menu to radio side of app
+      body: BlocBuilder<StationsBloc, StationsState>(         // Here starts the actual radio part of app
         buildWhen: (previous, current) {
-          return (current is! FetchingNextStationState);
+          return (current is! FetchingNextStationState);      // This decides whether to redraw radio or not, it redraws if "state" is not FetchingNextStationState
         },
         builder: (context, state) {
           if (state is InitialState) {
-            context.read<StationsBloc>().add(FetchStations());
+            context.read<StationsBloc>().add(FetchStations());    // Initial state of app, fetching first batch of 20 stations from API server
             return SizedBox();
           } else if (state is LoadingStationsState) {
-            return LoadingIndicator(label: 'Fetching stations');
+            return LoadingIndicator(label: 'Fetching stations');    // In this state first 20 stations stations are being loaded into radio app
           } else if (state is StationsFetchedStete) {
-            final stations = state.stations;
+            final stations = state.stations;                      // Here we have list of stations and we create all visual effects
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TitleHeader(
-                  title: 'Top Stations',
-                  status: BlocBuilder<PlayerBloc, PlayerState>(
-                      builder: (context, state) {
-                    if (state is PausedState || state is StoppedState) {
-                      return PausedStatus();
-                    } else {
-                      return PlayingStatus();
+                  title: 'Top Stations',                                         //
+                  status: BlocBuilder<PlayerBloc, PlayerState>(                  // Title and dosts that showing whether something is playing or not
+                      builder: (context, state) {                                //
+                    if (state is PausedState || state is StoppedState) {         //
+                      return PausedStatus();                                     //
+                    } else {                                                     //
+                      return PlayingStatus();                                    //
                     }
                   }),
                 ),
-                Expanded(
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (ScrollNotification scrollInfo) {
+                Expanded(                                                        // Whole Expanded function covers creation of visual list
+                  child: NotificationListener<ScrollNotification>(               // of stations that we have and finding out if user scrolled 
+                    onNotification: (ScrollNotification scrollInfo) {            // to the bottom of the list so new stations have to be downloaded
                       if (state is StationsFetchedStete &&
                           scrollInfo.metrics.pixels ==
-                              scrollInfo.metrics.maxScrollExtent) {
+                              scrollInfo.metrics.maxScrollExtent) {              //
                         context.read<StationsBloc>().add(FetchNextStations());
-                        return true;
+                        return true;                                             //
                       } else {
-                        return false;
+                        return false;                                            //
                       }
-                    },
+                    },                                                           //
                     child: ListView.builder(
-                      itemCount: stations.length,
+                      itemCount: stations.length,                                //
                       itemBuilder: (context, index) {
-                        return StationListItem(
+                        return StationListItem(                                  //
                           name: stations[index].name,
-                          imageUrl: stations[index].imageUrl,
+                          imageUrl: stations[index].imageUrl,                    //
                           onTap: () {
-                            context
-                                .read<PlayerBloc>()
-                                .add(PlayEvent(stations[index]));
-                          },
+                            context                                              //
+                                .read<PlayerBloc>()                              //
+                                .add(PlayEvent(stations[index]));                //
+                          },                                                     //
                         );
                       },
                     ),
@@ -79,10 +85,10 @@ class RadioPage extends StatelessWidget {
                 ),
                 BlocBuilder<PlayerBloc, PlayerState>(
                   builder: (context, state) {
-                    if (state is! StoppedState) {
-                      return SizedBox(height: 80);
+                    if (state is! StoppedState) {           // This is bottom sheet that is a background for app activity sheet
+                      return SizedBox(height: 80);          //
                     } else {
-                      return SizedBox();
+                      return SizedBox();                    //
                     }
                   },
                 )
@@ -90,16 +96,16 @@ class RadioPage extends StatelessWidget {
             );
           } else {
             return Center(
-              child: Column(
+              child: Column(                                                  // Else is returned if something is wrong (no internet, corrupted data etc.)
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('An error has occurred'),
+                  Text('An error has occurred'),                              //
                   SizedBox(height: 20),
                   MaterialButton(
-                    onPressed: () {
+                    onPressed: () {                                           //
                       context.read<StationsBloc>().add(FetchStations());
                     },
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColor,                    //
                     textColor: Colors.black,
                     child: Text('Retry'),
                   )
@@ -109,9 +115,9 @@ class RadioPage extends StatelessWidget {
           }
         },
       ),
-      bottomSheet: BlocBuilder<PlayerBloc, PlayerState>(
-        builder: (context, state) {
-          if (state is StoppedState) {
+      bottomSheet: BlocBuilder<PlayerBloc, PlayerState>(          // BottomSheet is a proper instalment of bottom activity panel
+        builder: (context, state) {                               // that shows favicon and name of current station, plays or pauses it.
+          if (state is StoppedState) {                            // Also home to PLAY and PAUSE buttons
             return SizedBox();
           } else if (state is PlayingState) {
             final currentStation = state.currentStation;
@@ -119,7 +125,7 @@ class RadioPage extends StatelessWidget {
               title: currentStation.name,
               imageUrl: currentStation.imageUrl,
               mediaButtonIcon: Icon(
-                Icons.pause,
+                Icons.pause_rounded,
                 size: 32,
               ),
               onMediaButtonPress: () {
@@ -132,7 +138,7 @@ class RadioPage extends StatelessWidget {
               title: currentStation.name,
               imageUrl: currentStation.imageUrl,
               mediaButtonIcon: Icon(
-                Icons.play_arrow,
+                Icons.play_arrow_rounded,
                 size: 32,
               ),
               onMediaButtonPress: () {
