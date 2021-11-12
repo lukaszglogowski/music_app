@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_svg/svg.dart';
 
 // This class shows small image of every station logo beside it.
 
 class StationFavicon extends StatelessWidget {
-  static const String DEFAULT_ICON = "assets/images/default.png";
   final String imageUrl;
 
   StationFavicon({required this.imageUrl});
@@ -22,15 +20,8 @@ class StationFavicon extends StatelessWidget {
         height: 48,
         width: 48,
         imageUrl: imageUrl,
-        placeholder: (context, _) {
-          return SvgPicture.asset(
-            DEFAULT_ICON,
-            height: 48,
-            width: 48,
-            semanticsLabel: 'Music',
-            color: Theme.of(context).textTheme.bodyText1!.color,
-          );
-        },
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 48.0),
       ),
     );
   }

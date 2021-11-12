@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_app/modules/bloc/stations_bloc/stations_bloc.dart';
 import 'package:music_app/widgets/drawer.dart';
-import 'package:music_app/widgets/loading_indicator.dart';
-import 'package:music_app/widgets/media_player_sheet.dart';
-import 'package:music_app/widgets/radio_status_animation.dart';
-import 'package:music_app/widgets/station_list_item.dart';
-import 'package:music_app/widgets/title_header.dart';
+import 'package:music_app/widgets/for_radio/loading_indicator.dart';
+import 'package:music_app/widgets/for_radio/media_player_sheet.dart';
+import 'package:music_app/widgets/for_radio/radio_status_animation.dart';
+import 'package:music_app/widgets/for_radio/station_list_item.dart';
+import 'package:music_app/widgets/for_radio/title_header.dart';
 import 'package:music_app/modules/bloc/player_bloc/player_bloc.dart';
 
 // Main page for Radio part of app, it contains list of stations, status dots and mediaplayer sheet.
-
 class RadioPage extends StatelessWidget {
   static const String routeName = '/radio';
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +76,7 @@ class RadioPage extends StatelessWidget {
                             context                                              //
                                 .read<PlayerBloc>()                              //
                                 .add(PlayEvent(stations[index]));                //
-                          },                                                     //
+                          },                                                    //
                         );
                       },
                     ),

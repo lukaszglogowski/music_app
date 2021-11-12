@@ -1,17 +1,18 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
-import 'package:music_app/widgets/station_favicon.dart';
+import 'package:music_app/widgets/for_radio/station_favicon.dart';
+
 
 // This class creates every item on list that displays all tracked radio stations.
-
 class StationListItem extends StatelessWidget {
   final GestureTapCallback onTap;
   final String imageUrl;
   final String name;
-
+  
   StationListItem({required this.onTap, required this.imageUrl, required this.name});
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return InkWell(

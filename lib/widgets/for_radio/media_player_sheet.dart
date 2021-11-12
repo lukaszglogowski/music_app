@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:music_app/widgets/station_favicon.dart';
+import 'package:music_app/widgets/for_radio/station_favicon.dart';
 
 // This class represents bottom sheet that shows current station and button to control it.
 
