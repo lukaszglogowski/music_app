@@ -6,7 +6,7 @@ import 'package:music_app/modules/radio/radio_player.dart';
 
 class JustAudioPlayer extends RadioPlayer {
   final _audioPlayer = AudioPlayer();
-  
+
   @override
   Future<void> pause() {
     return _audioPlayer.pause();
